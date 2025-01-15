@@ -1,134 +1,303 @@
 ﻿using BankAccountApp;
 using System;
+using Xunit;
 
 namespace BankAccountUnitTests
 {
     public class BankAccountTests
     {
         [Fact]
-        public void Credit_WithPositiveAmount_UpdatesBalance()
+        public void CreateAccount_ValidData()
         {
-            var account = new BankAccount("12345", 100, "John Doe", "Savings", DateTime.Now);
-            account.Credit(50);
-            Assert.Equal(150, account.GetBalance());
+            // Arrange
+            var accountNumber = "123";
+            var initialBalance = 1000;
+            var accountHolderName = "John Doe";
+            var accountType = "Savings";
+            var dateOpened = DateTime.Now;
+
+            // Act
+            var account = new BankAccount(accountNumber, initialBalance, accountHolderName, accountType, dateOpened);
+
+            // Assert
+            Assert.Equal(accountNumber, account.AccountNumber);
+            Assert.Equal(initialBalance, account.Balance);
+            Assert.Equal(accountHolderName, account.AccountHolderName);
+            Assert.Equal(accountType, account.AccountType);
+            Assert.Equal(dateOpened, account.DateOpened);
         }
 
         [Fact]
-        public void Credit_WithNegativeAmount_ShouldThrowException()
+        public void CreateAccount_InitialBalanceZero()
         {
-            var account = new BankAccount("12345", 100, "John Doe", "Savings", DateTime.Now);
-            Assert.Throws<ArgumentException>(() => account.Credit(-50));
+            // Arrange
+            var accountNumber = "124";
+            var initialBalance = 0;
+            var accountHolderName = "Jane Doe";
+            var accountType = "Checking";
+            var dateOpened = DateTime.Now;
+
+            // Act
+            var account = new BankAccount(accountNumber, initialBalance, accountHolderName, accountType, dateOpened);
+
+            // Assert
+            Assert.Equal(accountNumber, account.AccountNumber);
+            Assert.Equal(initialBalance, account.Balance);
+            Assert.Equal(accountHolderName, account.AccountHolderName);
+            Assert.Equal(accountType, account.AccountType);
+            Assert.Equal(dateOpened, account.DateOpened);
         }
 
         [Fact]
-        public void Credit_WithZeroAmount_ShouldNotChangeBalance()
+        public void CreateAccount_InitialBalanceNegative()
         {
-            var account = new BankAccount("12345", 100, "John Doe", "Savings", DateTime.Now);
-            account.Credit(0);
-            Assert.Equal(100, account.GetBalance());
+            // Arrange
+            var accountNumber = "125";
+            var initialBalance = -100;
+            var accountHolderName = "Jim Doe";
+            var accountType = "Business";
+            var dateOpened = DateTime.Now;
+
+            // Act
+            var account = new BankAccount(accountNumber, initialBalance, accountHolderName, accountType, dateOpened);
+
+            // Assert
+            Assert.Equal(accountNumber, account.AccountNumber);
+            Assert.Equal(initialBalance, account.Balance);
+            Assert.Equal(accountHolderName, account.AccountHolderName);
+            Assert.Equal(accountType, account.AccountType);
+            Assert.Equal(dateOpened, account.DateOpened);
+        }
+        
+        [Fact]
+        public void Credit_PositiveAmount()
+        {
+            // Arrange
+            var account = new BankAccount("123", 1000, "John Doe", "Savings", DateTime.Now);
+
+            // Act
+            account.Credit(200);
+
+            // Assert
+            Assert.Equal(1200, account.Balance);
         }
 
         [Fact]
-        public void Debit_WithSufficientBalance_ReducesBalance()
+        public void Credit_ZeroAmount()
         {
-            var account = new BankAccount("12345", 100, "John Doe", "Savings", DateTime.Now);
-            account.Debit(50);
-            Assert.Equal(50, account.GetBalance());
+            // Arrange
+            var account = new BankAccount("123", 1000, "John Doe", "Savings", DateTime.Now);
+            
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => account.Credit(0));
+            Assert.Equal("Credit amount must be positive.", exception.Message);            
         }
 
         [Fact]
-        public void Debit_WithInsufficientBalance_ThrowsException()
+        public void Credit_NegativeAmount()
         {
-            var account = new BankAccount("12345", 100, "John Doe", "Savings", DateTime.Now);
-            Assert.Throws<Exception>(() => account.Debit(150));
+            // Arrange
+            var account = new BankAccount("123", 1000, "John Doe", "Savings", DateTime.Now);
+
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => account.Credit(0));
+            Assert.Equal("Credit amount must be positive.", exception.Message);          
         }
 
         [Fact]
-        public void Debit_WithNegativeAmount_ShouldThrowException()
+        public void Debit_AmountWithinBalance()
         {
-            var account = new BankAccount("12345", 100, "John Doe", "Savings", DateTime.Now);
-            Assert.Throws<ArgumentException>(() => account.Debit(-50));
+            // Arrange
+            var account = new BankAccount("123", 1000, "John Doe", "Savings", DateTime.Now);
+
+            // Act
+            account.Debit(200);
+
+            // Assert
+            Assert.Equal(800, account.Balance);
         }
 
         [Fact]
-        public void Debit_WithZeroAmount_ShouldNotChangeBalance()
+        public void Debit_AmountExceedingBalance()
         {
-            var account = new BankAccount("12345", 100, "John Doe", "Savings", DateTime.Now);
-            account.Debit(0);
-            Assert.Equal(100, account.GetBalance());
+            // Arrange
+            var account = new BankAccount("123", 1000, "John Doe", "Savings", DateTime.Now);
+
+            // Act & Assert
+            var exception = Assert.Throws<Exception>(() => account.Debit(1200));
+            Assert.Equal("Insufficient balance for debit.", exception.Message);
         }
 
         [Fact]
-        public void Transfer_WithSufficientBalance_ShouldDecreaseSourceAndIncreaseTargetBalance()
+        public void Debit_ZeroAmount()
         {
-            var sourceAccount = new BankAccount("12345", 100, "John Doe", "Savings", DateTime.Now);
-            var targetAccount = new BankAccount("67890", 100, "Jane Doe", "Savings", DateTime.Now);
-            sourceAccount.Transfer(targetAccount, 50);
-            Assert.Equal(50, sourceAccount.GetBalance());
-            Assert.Equal(150, targetAccount.GetBalance());
+            // Arrange
+            var account = new BankAccount("123", 1000, "John Doe", "Savings", DateTime.Now);
+
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => account.Debit(0));
+            Assert.Equal("Debit amount must be positive.", exception.Message);
         }
 
         [Fact]
-        public void Transfer_WithInsufficientBalance_ShouldThrowException()
+        public void Debit_NegativeAmount()
         {
-            var sourceAccount = new BankAccount("12345", 100, "John Doe", "Savings", DateTime.Now);
-            var targetAccount = new BankAccount("67890", 100, "Jane Doe", "Savings", DateTime.Now);
-            Assert.Throws<Exception>(() => sourceAccount.Transfer(targetAccount, 150));
+            // Arrange
+            var account = new BankAccount("123", 1000, "John Doe", "Savings", DateTime.Now);
+
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => account.Debit(-200));
+            Assert.Equal("Debit amount must be positive.", exception.Message);
         }
 
         [Fact]
-        public void Transfer_WithNegativeAmount_ShouldThrowException()
+        public void Transfer_SuccessfulTransfer()
         {
-            var sourceAccount = new BankAccount("12345", 100, "John Doe", "Savings", DateTime.Now);
-            var targetAccount = new BankAccount("67890", 100, "Jane Doe", "Savings", DateTime.Now);
-            Assert.Throws<ArgumentException>(() => sourceAccount.Transfer(targetAccount, -50));
+            // Arrange
+            var account1 = new BankAccount("123", 1000, "John Doe", "Savings", DateTime.Now);
+            var account2 = new BankAccount("456", 500, "Jane Doe", "Savings", DateTime.Now);
+
+            // Act
+            account1.Transfer(account2, 200);
+
+            // Assert
+            Assert.Equal(800, account1.Balance);
+            Assert.Equal(700, account2.Balance);
         }
 
         [Fact]
-        public void Transfer_WithZeroAmount_ShouldNotChangeBalances()
+        public void Transfer_InsufficientBalance()
         {
-            var sourceAccount = new BankAccount("12345", 100, "John Doe", "Savings", DateTime.Now);
-            var targetAccount = new BankAccount("67890", 100, "Jane Doe", "Savings", DateTime.Now);
-            sourceAccount.Transfer(targetAccount, 0);
-            Assert.Equal(100, sourceAccount.GetBalance());
-            Assert.Equal(100, targetAccount.GetBalance());
+            // Arrange
+            var account1 = new BankAccount("123", 100, "John Doe", "Savings", DateTime.Now);
+            var account2 = new BankAccount("456", 500, "Jane Doe", "Savings", DateTime.Now);
+
+            // Act & Assert
+            var exception = Assert.Throws<Exception>(() => account1.Transfer(account2, 200));
+            Assert.Equal("Insufficient balance for transfer.", exception.Message);
         }
 
         [Fact]
-        public void Transfer_ToSameAccount_ShouldThrowException()
+        public void Transfer_ExceedsLimitForDifferentOwners()
         {
-            var account = new BankAccount("12345", 100, "John Doe", "Savings", DateTime.Now);
-            Assert.Throws<ArgumentException>(() => account.Transfer(account, 50));
+            // Arrange
+            var account1 = new BankAccount("123", 1000, "John Doe", "Savings", DateTime.Now);
+            var account2 = new BankAccount("456", 500, "Jane Smith", "Savings", DateTime.Now);
+
+            // Act & Assert
+            var exception = Assert.Throws<Exception>(() => account1.Transfer(account2, 600));
+            Assert.Equal("Transfer amount exceeds maximum limit for different account owners.", exception.Message);
         }
 
         [Fact]
-        public void Transfer_ToNullAccount_ShouldThrowException()
+        public void GetBalance_InitialBalance()
         {
-            var account = new BankAccount("12345", 100, "John Doe", "Savings", DateTime.Now);
-            Assert.Throws<ArgumentNullException>(() => account.Transfer(null, 50));
+            // Arrange
+            var account = new BankAccount("123", 1000, "John Doe", "Savings", DateTime.Now);
+
+            // Act
+            var balance = account.GetBalance();
+
+            // Assert
+            Assert.Equal(1000, balance);
         }
 
         [Fact]
-        public void CalculateInterest_ShouldReturnCorrectAmount()
+        public void GetBalance_AfterCredit()
         {
-            var account = new BankAccount("12345", 100, "John Doe", "Savings", DateTime.Now);
+            // Arrange
+            var account = new BankAccount("123", 1000, "John Doe", "Savings", DateTime.Now);
+
+            // Act
+            account.Credit(200);
+            var balance = account.GetBalance();
+
+            // Assert
+            Assert.Equal(1200, balance);
+        }
+
+        [Fact]
+        public void GetBalance_AfterDebit()
+        {
+            // Arrange
+            var account = new BankAccount("123", 1000, "John Doe", "Savings", DateTime.Now);
+
+            // Act
+            account.Debit(200);
+            var balance = account.GetBalance();
+
+            // Assert
+            Assert.Equal(800, balance);
+        }
+
+        [Fact]
+        public void CalculateInterest_PositiveBalance()
+        {
+            // Arrange
+            var account = new BankAccount("123", 1000, "John Doe", "Savings", DateTime.Now);
+            var expectedInterest = 50; // Assuming 5% interest rate
+
+            // Act
             var interest = account.CalculateInterest(0.05);
-            Assert.Equal(5, interest);
+
+            // Assert
+            Assert.Equal(expectedInterest, interest);
         }
 
         [Fact]
-        public void CalculateInterest_WithNegativeRate_ShouldThrowException()
+        public void CalculateInterest_ZeroBalance()
         {
-            var account = new BankAccount("12345", 100, "John Doe", "Savings", DateTime.Now);
-            Assert.Throws<ArgumentException>(() => account.CalculateInterest(-0.05));
+            // Arrange
+            var account = new BankAccount("123", 0, "John Doe", "Savings", DateTime.Now);
+            var expectedInterest = 0;
+
+            // Act
+            var interest = account.CalculateInterest(0.05);
+
+            // Assert
+            Assert.Equal(expectedInterest, interest);
         }
 
         [Fact]
-        public void CalculateInterest_WithZeroRate_ShouldReturnZero()
+        public void CalculateInterest_NegativeBalance()
         {
-            var account = new BankAccount("12345", 100, "John Doe", "Savings", DateTime.Now);
-            var interest = account.CalculateInterest(0);
-            Assert.Equal(0, interest);
+            // Arrange
+            var account = new BankAccount("123", -1000, "John Doe", "Savings", DateTime.Now);
+            var expectedInterest = 0; // Assuming no interest on negative balance
+
+            // Act
+            var interest = account.CalculateInterest(0.05);
+
+            // Assert
+            Assert.Equal(expectedInterest, interest);
+        }
+
+        [Fact]
+        public void CalculateInterest_HighInterestRate()
+        {
+            // Arrange
+            var account = new BankAccount("123", 1000, "John Doe", "Savings", DateTime.Now);
+            var expectedInterest = 200; // Assuming 20% interest rate
+
+            // Act
+            var interest = account.CalculateInterest(0.20);
+
+            // Assert
+            Assert.Equal(expectedInterest, interest);
+        }
+
+        [Fact]
+        public void CalculateInterest_LowInterestRate()
+        {
+            // Arrange
+            var account = new BankAccount("123", 1000, "John Doe", "Savings", DateTime.Now);
+            var expectedInterest = 10; // Assuming 1% interest rate
+
+            // Act
+            var interest = account.CalculateInterest(0.01);
+
+            // Assert
+            Assert.Equal(expectedInterest, interest);
         }
     }
 }

@@ -1,0 +1,15 @@
+/workspaces/mslearn-github-copilot-create-tests-bank/APL2007M5BankAccount/BankAccountClass/bin/Debug/net8.0/BankAccount
+/workspaces/mslearn-github-copilot-create-tests-bank/APL2007M5BankAccount/BankAccountClass/bin/Debug/net8.0/BankAccount.deps.json
+/workspaces/mslearn-github-copilot-create-tests-bank/APL2007M5BankAccount/BankAccountClass/bin/Debug/net8.0/BankAccount.runtimeconfig.json
+/workspaces/mslearn-github-copilot-create-tests-bank/APL2007M5BankAccount/BankAccountClass/bin/Debug/net8.0/BankAccount.dll
+/workspaces/mslearn-github-copilot-create-tests-bank/APL2007M5BankAccount/BankAccountClass/bin/Debug/net8.0/BankAccount.pdb
+/workspaces/mslearn-github-copilot-create-tests-bank/APL2007M5BankAccount/BankAccountClass/obj/Debug/net8.0/BankAccount.GeneratedMSBuildEditorConfig.editorconfig
+/workspaces/mslearn-github-copilot-create-tests-bank/APL2007M5BankAccount/BankAccountClass/obj/Debug/net8.0/BankAccount.AssemblyInfoInputs.cache
+/workspaces/mslearn-github-copilot-create-tests-bank/APL2007M5BankAccount/BankAccountClass/obj/Debug/net8.0/BankAccount.AssemblyInfo.cs
+/workspaces/mslearn-github-copilot-create-tests-bank/APL2007M5BankAccount/BankAccountClass/obj/Debug/net8.0/BankAccount.csproj.CoreCompileInputs.cache
+/workspaces/mslearn-github-copilot-create-tests-bank/APL2007M5BankAccount/BankAccountClass/obj/Debug/net8.0/BankAccount.sourcelink.json
+/workspaces/mslearn-github-copilot-create-tests-bank/APL2007M5BankAccount/BankAccountClass/obj/Debug/net8.0/BankAccount.dll
+/workspaces/mslearn-github-copilot-create-tests-bank/APL2007M5BankAccount/BankAccountClass/obj/Debug/net8.0/refint/BankAccount.dll
+/workspaces/mslearn-github-copilot-create-tests-bank/APL2007M5BankAccount/BankAccountClass/obj/Debug/net8.0/BankAccount.pdb
+/workspaces/mslearn-github-copilot-create-tests-bank/APL2007M5BankAccount/BankAccountClass/obj/Debug/net8.0/BankAccount.genruntimeconfig.cache
+/workspaces/mslearn-github-copilot-create-tests-bank/APL2007M5BankAccount/BankAccountClass/obj/Debug/net8.0/ref/BankAccount.dll

@@ -21,13 +21,23 @@ namespace BankAccountApp
 
         public void Credit(double amount)
         {
-            Balance += amount;
+            if (amount > 0)
+            {
+                Balance += amount;
+            }
+            else
+            {                
+                throw new ArgumentException("Credit amount must be positive.");
+            }            
         }
 
         public void Debit(double amount)
         {
-
-            if (Balance >= amount)
+            if (amount <= 0)
+            {
+                throw new ArgumentException("Debit amount must be positive.");
+            }
+            else if (Balance >= amount)
             {
                 Balance -= amount;
             }
@@ -68,7 +78,14 @@ namespace BankAccountApp
 
         public double CalculateInterest(double interestRate)
         {
-            return Balance * interestRate;
+            if (Balance < 0)        
+            {    
+                return 0;
+            }
+            else
+            {
+                return Balance * interestRate;
+            }
         }
     }
 }
